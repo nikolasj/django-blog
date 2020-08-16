@@ -1,0 +1,11 @@
+Django
+psycopg2
+djangorestframework
+djangorestframework-simplejwt
+django-summernote
+django-allauth
+
+# for jupyter notebook
+django-extensions
+jupyter
+ipython
