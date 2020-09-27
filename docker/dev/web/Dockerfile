@@ -18,6 +18,8 @@ RUN apk update \
 # install Ipython dependencies
 RUN apk add build-base libzmq zeromq-dev
 
+# install Pillow dependencies
+RUN apk add jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev
 
 # install dependencies
 RUN pip install --upgrade pip

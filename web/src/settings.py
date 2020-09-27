@@ -12,6 +12,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 
 INSTALLED_APPS = [
+    'blog.apps.BlogConfig',
     'app.apps.AppConfig',
     'django.contrib.admin',
     'django.contrib.auth',

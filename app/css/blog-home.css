@@ -1,0 +1,9 @@
+
+body {
+  padding-top: 56px;
+}
+
+
+.content {
+  min-height: calc(100vh - 180px);
+}
