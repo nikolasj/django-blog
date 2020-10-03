@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_jwt.views import verify_jwt_token, refresh_jwt_token
 
 
 urlpatterns = [
@@ -11,8 +11,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('summernote/', include('django_summernote.urls')),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('token/verify/', verify_jwt_token, name="verify_auth_token"),
+    path('token/refresh/', refresh_jwt_token, name="refresh_auth_token"),
 ]
 
 # handler404 = 'app.views.custom_handler404'

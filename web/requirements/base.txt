@@ -1,6 +1,7 @@
 Django
 psycopg2 # для подключения к постгре
 djangorestframework
+django-rest-auth[with_social]==0.9.5
 djangorestframework-jwt
 django-summernote # текстовой редактор
 django-allauth

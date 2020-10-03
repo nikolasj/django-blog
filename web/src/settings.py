@@ -2,7 +2,7 @@ import os
 
 from .additional.shell_plus import *
 from .additional.allauth_settings import *
-
+from .additional.jwt import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEBUG = int(os.environ.get("DEBUG", default=1))
@@ -25,7 +25,9 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_summernote',
     'rest_framework',
-
+    'rest_framework.authtoken',
+    'rest_auth',
+    'rest_auth.registration',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -71,7 +73,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
