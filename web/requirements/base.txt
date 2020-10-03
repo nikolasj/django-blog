@@ -1,0 +1,11 @@
+Django
+psycopg2 # для подключения к постгре
+djangorestframework
+djangorestframework-jwt
+django-summernote # текстовой редактор
+django-allauth
+pillow # для работы с изображениями
+
+
+
+

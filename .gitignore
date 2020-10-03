@@ -1,0 +1,9 @@
+Pipfile
+Pipfile.lock
+.idea
+__pycache__/
+web/.ash_history
+
+web/media/blog_images/*
+!web/media/blog_images/no_image.png
+

@@ -1,0 +1,7 @@
+
+-r ./base.txt
+
+# for jupyter notebook
+django-extensions
+jupyter
+ipython
