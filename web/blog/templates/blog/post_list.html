@@ -14,10 +14,10 @@
         <div class="card-body">
             <h2 class="card-title">{{ blog.title }}</h2>
             <p class="card-text">{{ blog.content | safe | truncatewords:20 }}</p>
-            <a href="{{ blog.id }}" class="btn btn-primary">Read More &rarr;</a>
+            <a href="{{ blog.get_absolute_url }}" class="btn btn-primary">Read More &rarr;</a>
         </div>
         <div class="card-footer text-muted">
-            {{ blog.publish }}
+            {{ blog.publish | date:"d M Y" }}
             <a href="#">{{ blog.author }}</a>
         </div>
     </div>

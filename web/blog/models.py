@@ -1,6 +1,9 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
+from django.utils.text import slugify
+
 from .managers import PublishedManager
 
 
@@ -11,7 +14,7 @@ def poster_upload_to(instance, file):
 
 class Blog(models.Model):
     title = models.CharField(verbose_name='Title', max_length=200)
-    slug = models.SlugField(verbose_name='Url', allow_unicode=True)
+    slug = models.SlugField(verbose_name='Url', allow_unicode=True, unique=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts')
     content = models.TextField('Content')
     poster = models.ImageField('Poster', upload_to=poster_upload_to, default='blog_images/no_image.png')
@@ -24,3 +27,17 @@ class Blog(models.Model):
 
     def __str__(self):
         return f"{self.title}: {self.author.username}"
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title, allow_unicode=True).lower()
+        return super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('blog:detail', kwargs={'slug': self.slug})
+
+
+class Comment(models.Model):
+    author = models.CharField('Author', max_length=200)
+    comment = models.TextField('Comment')
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='blog_comment')
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='parent_comment', null=True, blank=True)
