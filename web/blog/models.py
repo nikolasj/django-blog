@@ -32,6 +32,10 @@ class Blog(models.Model):
         self.slug = slugify(self.title, allow_unicode=True).lower()
         return super().save(*args, **kwargs)
 
+    def get_comments(self):
+        # print(dir(self))
+        return self.blog_comment.filter(parent__isnull=True)
+
     def get_absolute_url(self):
         return reverse('blog:detail', kwargs={'slug': self.slug})
 
@@ -41,3 +45,6 @@ class Comment(models.Model):
     comment = models.TextField('Comment')
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='blog_comment')
     parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='parent_comment', null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.author}: {self.comment[:10]}"
