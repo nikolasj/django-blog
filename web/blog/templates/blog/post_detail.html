@@ -44,7 +44,7 @@
             </form>
         </div>
     </div>
-    <!-- Comments Form end -->
+
 
     <!-- Single Comment -->
     {% for comment in blog.get_comments %}
@@ -53,21 +53,7 @@
         <div class="media-body">
             <h5 class="mt-0">{{ comment.author }}</h5>
             {{ comment.comment }}
-            <!-- Comments Form -->
-            <div class="card my-4">
-                <h5 class="card-header">Leave a Comment:</h5>
-                <div class="card-body">
-                    <form method="POST" action="{% url 'blog:add_comment' blog.slug %}">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <p>{{ form.author }}</p>
-                            <p>{{ form.comment }}</p>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
-                </div>
-            </div>
-            <!-- Comments Form end -->
+
             {% for parent_comment in comment.parent_comment.all %}
             <div class="media mt-4">
                 <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
