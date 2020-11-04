@@ -3,6 +3,8 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import DetailView, ListView
 from rest_framework.views import APIView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import CommentForm
 
 from .models import Blog, Comment
@@ -33,7 +35,10 @@ class BlogDetailView(DetailView):
         return Blog.published.all()
 
 
-class CommentAddView(View):
+# @login_required(login_url='/login/')
+class CommentAddView(SuccessMessageMixin, LoginRequiredMixin, View):
+    login_url = '/accounts/login/'
+
     def post(self, request, slug, *args, **kwargs):
         form = CommentForm(data=request.POST)
         if form.is_valid():

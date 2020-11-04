@@ -34,7 +34,7 @@ class Blog(models.Model):
 
     def get_comments(self):
         # print(dir(self))
-        return self.blog_comment.filter(parent__isnull=True)
+        return self.blog_comment.filter(parent__isnull=True).order_by('-created_date')
 
     def get_absolute_url(self):
         return reverse('blog:detail', kwargs={'slug': self.slug})
@@ -45,6 +45,7 @@ class Comment(models.Model):
     comment = models.TextField('Comment')
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='blog_comment')
     parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='parent_comment', null=True, blank=True)
+    created_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.author}: {self.comment[:10]}"
