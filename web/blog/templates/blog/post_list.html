@@ -10,11 +10,11 @@
     <!-- Blog Post -->
     {% for blog in blogs %}
     <div class="card mb-4">
-        <img class="card-img-top" width="300" height="500" src="{{ blog.poster.url }}" alt="Card image cap">
+        <img class="card-img-top" width="200" height="500" src="{{ blog.poster.url }}" alt="Card image cap">
         <div class="card-body">
             <h2 class="card-title">{{ blog.title }}</h2>
-            <p class="card-text">{{ blog.content | safe | truncatewords:20 }}</p>
-            <a href="{{ blog.get_absolute_url }}" class="btn btn-primary">Read More &rarr;</a>
+            <p class="card-text">{{ blog.content | truncatewords:60 | safe }}</p>
+            <a href="{{ blog.get_absolute_url }}" class="btn btn-primary">Read More</a>
         </div>
         <div class="card-footer text-muted">
             {{ blog.publish | date:"d M Y" }}

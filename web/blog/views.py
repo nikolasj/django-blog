@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views import View
@@ -24,7 +25,8 @@ class BlogDetailView(DetailView):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         data['comments'] = Comment.objects.filter(blog=self.get_object())
-        data['form'] = CommentForm()
+        if self.request.user.is_authenticated:
+            data['form'] = CommentForm()
         return data
 
     def get_object(self, queryset=None):
@@ -35,7 +37,6 @@ class BlogDetailView(DetailView):
         return Blog.published.all()
 
 
-# @login_required(login_url='/login/')
 class CommentAddView(SuccessMessageMixin, LoginRequiredMixin, View):
     login_url = '/accounts/login/'
 
@@ -44,6 +45,12 @@ class CommentAddView(SuccessMessageMixin, LoginRequiredMixin, View):
         if form.is_valid():
             form = form.save(commit=False)
             form.blog = Blog.published.get(slug=slug)
+            user = request.POST.get('author')
+            print(type(user))
+            form.author_id = int(user)
+            if request.POST.get('parent'):
+                form.parent_id = int(request.POST.get('parent'))
+                # form.parent = Comment.objects.get(id=int(request.POST.get('parent')))
+            print(request.POST)
             form.save()
-        print(request.POST)
         return redirect(reverse('blog:detail', kwargs={'slug': slug}))

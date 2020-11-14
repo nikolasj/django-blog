@@ -41,7 +41,8 @@ class Blog(models.Model):
 
 
 class Comment(models.Model):
-    author = models.CharField('Author', max_length=200)
+    # author = models.CharField('Author', max_length=200)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_set')
     comment = models.TextField('Comment')
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='blog_comment')
     parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='parent_comment', null=True, blank=True)
