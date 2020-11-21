@@ -46,11 +46,10 @@ class CommentAddView(SuccessMessageMixin, LoginRequiredMixin, View):
             form = form.save(commit=False)
             form.blog = Blog.published.get(slug=slug)
             user = request.POST.get('author')
-            print(type(user))
             form.author_id = int(user)
             if request.POST.get('parent'):
                 form.parent_id = int(request.POST.get('parent'))
                 # form.parent = Comment.objects.get(id=int(request.POST.get('parent')))
-            print(request.POST)
+            # print(request.POST)
             form.save()
         return redirect(reverse('blog:detail', kwargs={'slug': slug}))

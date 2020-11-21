@@ -1,11 +1,11 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
 
 from .managers import PublishedManager
-
+User = get_user_model()
 
 def poster_upload_to(instance, file):
     now = timezone.now()

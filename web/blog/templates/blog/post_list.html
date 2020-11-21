@@ -42,7 +42,7 @@
                 <p>{{ post.id}} - {{ post.title }} - {{ post.slug }} - {{ post.publish}} - Draft: {{ post.draft }}</p>
 
                 <a href="{{ post.get_absolute_url }}">{{ post.title}}</a>
-                <p> {{ post.content | safe |truncatewords:20}}</p>
+                <p> {{ post.content | safe | truncatewords:100}}</p>
                 {% endfor %}
             </div>
         </div>
