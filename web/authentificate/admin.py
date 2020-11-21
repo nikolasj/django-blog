@@ -11,6 +11,7 @@ User = get_user_model()
 class BlogInline(admin.StackedInline):
     model = Blog
     extra = 1
+    verbose_name_plural = 'Blog'
 
 
 @admin.register(User)

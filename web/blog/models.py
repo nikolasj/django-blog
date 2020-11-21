@@ -3,7 +3,6 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
-
 from .managers import PublishedManager
 User = get_user_model()
 
@@ -26,7 +25,7 @@ class Blog(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f"{self.title}: {self.author.username}"
+        return f"{self.title}: {self.author.email}"
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title, allow_unicode=True).lower()
