@@ -1,10 +1,13 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db import models
+from django.templatetags.static import static
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 from django.utils.text import slugify
-
 from .managers import PublishedManager
+
+User = get_user_model()
 
 
 def poster_upload_to(instance, file):
@@ -21,12 +24,12 @@ class Blog(models.Model):
     publish = models.DateTimeField('Publish date', auto_now_add=True)
     draft = models.BooleanField('Draft', default=True)
 
-    published = PublishedManager()
+    # published = PublishedManager()
 
     objects = models.Manager()
 
     def __str__(self):
-        return f"{self.title}: {self.author.username}"
+        return f"{self.title}: {self.author.email}"
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title, allow_unicode=True).lower()
@@ -34,17 +37,27 @@ class Blog(models.Model):
 
     def get_comments(self):
         # print(dir(self))
-        return self.blog_comment.filter(parent__isnull=True)
+        return self.blog_comment.filter(parent__isnull=True).order_by('-created_date')
 
     def get_absolute_url(self):
         return reverse('blog:detail', kwargs={'slug': self.slug})
 
+    def is_published(self):
+        icon_true = static("admin/img/icon-yes.svg")
+        icon_false = static("admin/img/icon-no.svg")
+        return mark_safe(f'<img src="{icon_false}" alt="False">') if self.draft \
+            else mark_safe(f'<img src="{icon_true}" alt="True">')
+
+    is_published.short_description = 'Published'
+
 
 class Comment(models.Model):
-    author = models.CharField('Author', max_length=200)
+    # author = models.CharField('Author', max_length=200)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_set')
     comment = models.TextField('Comment')
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='blog_comment')
     parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='parent_comment', null=True, blank=True)
+    created_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.author}: {self.comment[:10]}"

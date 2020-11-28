@@ -9,11 +9,12 @@ DEBUG = int(os.environ.get("DEBUG", default=1))
 SITE_ID = int(os.environ.get("SITE_ID", default=1))
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 SECRET_KEY = os.environ.get("SECRET_KEY")
-
+AUTH_USER_MODEL = 'authentificate.User'
 
 INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'app.apps.AppConfig',
+    'authentificate.apps.AuthentificateConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -114,7 +115,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
