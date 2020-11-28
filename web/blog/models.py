@@ -1,10 +1,14 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.templatetags.static import static
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 from .managers import PublishedManager
+
 User = get_user_model()
+
 
 def poster_upload_to(instance, file):
     now = timezone.now()
@@ -20,7 +24,7 @@ class Blog(models.Model):
     publish = models.DateTimeField('Publish date', auto_now_add=True)
     draft = models.BooleanField('Draft', default=True)
 
-    published = PublishedManager()
+    # published = PublishedManager()
 
     objects = models.Manager()
 
@@ -37,6 +41,14 @@ class Blog(models.Model):
 
     def get_absolute_url(self):
         return reverse('blog:detail', kwargs={'slug': self.slug})
+
+    def is_published(self):
+        icon_true = static("admin/img/icon-yes.svg")
+        icon_false = static("admin/img/icon-no.svg")
+        return mark_safe(f'<img src="{icon_false}" alt="False">') if self.draft \
+            else mark_safe(f'<img src="{icon_true}" alt="True">')
+
+    is_published.short_description = 'Published'
 
 
 class Comment(models.Model):
