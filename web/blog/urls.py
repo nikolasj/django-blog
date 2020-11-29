@@ -8,5 +8,5 @@ urlpatterns = [
     path('', IndexView.as_view(), name='index'),
     path('<str:slug>/', BlogDetailView.as_view(), name='detail'),
     path('api/blog/', BlogAPIView.as_view(), name='blog_api'),
-    path('<str:slug>/add-comment/', login_required(CommentAddView.as_view()), name='add_comment')
+    path('<str:slug>/add-comment/', login_required(CommentAddView.as_view()), name='add_comment'),
 ]

@@ -3,7 +3,9 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from rest_framework_jwt.views import verify_jwt_token, refresh_jwt_token
+from rest_framework_swagger.views import get_swagger_view
 
+schema_view = get_swagger_view(title='Swagger API')
 
 urlpatterns = [
     path('', include('app.urls')),
@@ -13,6 +15,7 @@ urlpatterns = [
     path('summernote/', include('django_summernote.urls')),
     path('token/verify/', verify_jwt_token, name="verify_auth_token"),
     path('token/refresh/', refresh_jwt_token, name="refresh_auth_token"),
+    path('docs/', schema_view),
 ]
 
 # handler404 = 'app.views.custom_handler404'
