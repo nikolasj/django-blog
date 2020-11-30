@@ -25,7 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'django_extensions',
     'django_summernote',
-    'rest_framework_swagger',
+    'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
@@ -64,9 +64,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-            'libraries': {  # Adding this section should work around the issue.
-                'staticfiles': 'django.templatetags.static',
-            },
+            # 'libraries': {  # Adding this section should work around the issue.
+            #     'staticfiles': 'django.templatetags.static',
+            # },
         },
     },
 ]
