@@ -13,7 +13,7 @@ from .models import Blog, Comment
 
 class IndexView(ListView):
     template_name = 'blog/post_list.html'
-    queryset = Blog.published.order_by('publish')
+    queryset = Blog.objects.published.order_by('publish')
     context_object_name = 'blogs'
 
 
@@ -31,10 +31,10 @@ class BlogDetailView(DetailView):
 
     def get_object(self, queryset=None):
         slug = self.kwargs.get('slug')
-        return Blog.published.get(slug=slug)
+        return Blog.objects.published.get(slug=slug)
 
     def get_queryset(self):
-        return Blog.published.all()
+        return Blog.objects.published.all()
 
 
 class CommentAddView(SuccessMessageMixin, LoginRequiredMixin, View):
@@ -44,7 +44,7 @@ class CommentAddView(SuccessMessageMixin, LoginRequiredMixin, View):
         form = CommentForm(data=request.POST)
         if form.is_valid():
             form = form.save(commit=False)
-            form.blog = Blog.published.get(slug=slug)
+            form.blog = Blog.objects.published.get(slug=slug)
             user = request.POST.get('author')
             form.author_id = int(user)
             if request.POST.get('parent'):
