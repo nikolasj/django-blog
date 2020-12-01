@@ -6,4 +6,4 @@ djangorestframework-jwt
 django-summernote # текстовой редактор
 django-allauth
 pillow # для работы с изображениями
-
+drf-yasg

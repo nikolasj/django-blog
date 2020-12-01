@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'django_extensions',
     'django_summernote',
+    'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
@@ -63,6 +64,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            # 'libraries': {  # Adding this section should work around the issue.
+            #     'staticfiles': 'django.templatetags.static',
+            # },
         },
     },
 ]
@@ -78,6 +82,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
+    'DEFAULT_SCHEMA_CLASS': ('rest_framework.schemas.coreapi.AutoSchema'),
 }
 
 DATABASES = {

@@ -1,6 +1,8 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
 from django_summernote.admin import SummernoteModelAdmin
 from .models import Blog, Comment
+from django.templatetags.static import static
 
 
 class CommentInline(admin.TabularInline):
@@ -18,7 +20,6 @@ class Blog(SummernoteModelAdmin):
     # prepopulated_fields = {'slug': ('title',)}
     fields = ('title', 'author', 'content', 'draft', 'poster',)
     summernote_fields = ('content',)
-    inlines = (CommentInline,)
     # readonly_fields = ('author',)
     # actions_on_top = True
     # actions_on_bottom = True

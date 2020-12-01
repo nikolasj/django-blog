@@ -1,19 +1,44 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views import View
 from django.views.generic import DetailView, ListView
+from rest_framework.generics import GenericAPIView
 from rest_framework.views import APIView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import CommentForm
-
+from .serializers import *
+from rest_framework.response import Response
 from .models import Blog, Comment
+
+
+class BlogAPIView(GenericAPIView):
+    serializer_class = BlogSerializer
+
+    def get_queryset(self):
+        return Blog.objects.all()
+
+    def get(self, request):
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        return Response(serializer.data)
+
+
+class CommentAPIAddView(GenericAPIView):
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        return Comment.objects.all()
+
+    def get(self, request):
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        return Response(serializer.data)
 
 
 class IndexView(ListView):
     template_name = 'blog/post_list.html'
-    queryset = Blog.objects.published.order_by('publish')
+    queryset = Blog.objects.order_by('publish')
     context_object_name = 'blogs'
 
 
@@ -31,20 +56,19 @@ class BlogDetailView(DetailView):
 
     def get_object(self, queryset=None):
         slug = self.kwargs.get('slug')
-        return Blog.objects.published.get(slug=slug)
+        return Blog.objects.get(slug=slug)
 
     def get_queryset(self):
-        return Blog.objects.published.all()
+        return Blog.objects.all()
 
 
-class CommentAddView(SuccessMessageMixin, LoginRequiredMixin, View):
-    login_url = '/accounts/login/'
+class CommentAddView(APIView):
 
     def post(self, request, slug, *args, **kwargs):
         form = CommentForm(data=request.POST)
         if form.is_valid():
             form = form.save(commit=False)
-            form.blog = Blog.objects.published.get(slug=slug)
+            form.blog = Blog.objects.get(slug=slug)
             user = request.POST.get('author')
             form.author_id = int(user)
             if request.POST.get('parent'):

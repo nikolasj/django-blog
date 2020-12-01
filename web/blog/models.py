@@ -3,9 +3,6 @@ from django.db import models
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.text import slugify
-from django.templatetags.static import static
-from django.utils.safestring import mark_safe
-
 from .managers import PublishedManager
 User = get_user_model()
 
@@ -24,7 +21,7 @@ class Blog(models.Model):
     publish = models.DateTimeField('Publish date', auto_now_add=True)
     draft = models.BooleanField('Draft', default=True)
 
-    objects = PublishedManager()
+    objects = models.Manager()
 
     def __str__(self):
         return f"{self.title}: {self.author.email}"
@@ -42,6 +39,7 @@ class Blog(models.Model):
 
     def is_published(self):
         return not self.draft
+
     is_published.short_description = 'Published'
     is_published.boolean = True
 
