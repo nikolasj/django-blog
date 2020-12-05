@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.views import View
 from django.views.generic import DetailView, ListView
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView, CreateAPIView
 from rest_framework.views import APIView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -25,7 +25,7 @@ class BlogAPIView(GenericAPIView):
         return Response(serializer.data)
 
 
-class CommentAPIAddView(GenericAPIView):
+class CommentAPIAddView(CreateAPIView):
     serializer_class = CommentSerializer
 
     def get_queryset(self):
