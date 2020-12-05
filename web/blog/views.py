@@ -1,10 +1,13 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from rest_framework import status
+from rest_framework.generics import get_object_or_404
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views import View
 from django.views.generic import DetailView, ListView
 from rest_framework.generics import GenericAPIView, CreateAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -12,7 +15,7 @@ from .forms import CommentForm
 from .serializers import *
 from rest_framework.response import Response
 from .models import Blog, Comment
-
+from authentificate.models import User
 
 class BlogAPIView(GenericAPIView):
     serializer_class = BlogSerializer
@@ -27,6 +30,7 @@ class BlogAPIView(GenericAPIView):
 
 class CommentAPIAddView(CreateAPIView):
     serializer_class = CommentSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         return Comment.objects.all()
@@ -34,6 +38,30 @@ class CommentAPIAddView(CreateAPIView):
     def get(self, request):
         serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response(serializer.data)
+
+    def perform_create(self, serializer):
+        print(self.request.user)
+        blog = Blog.objects.get(slug='blog-1')
+
+        serializer.save(author=self.request.user, blog=blog)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        return Response(status=status.HTTP_200_OK)
+
+    # def perform_create(self, serializer):
+    #     print(User)
+    #     author = get_object_or_404(User, id=self.request.data.get('id'))
+    #     return serializer.save(author=author)
+
+    # def post(self, request, *args, **kwargs):
+    #     print(request.POST)
+    #
+    #
+    #     return Response(status=status.HTTP_200_OK)
 
 
 class IndexView(ListView):
