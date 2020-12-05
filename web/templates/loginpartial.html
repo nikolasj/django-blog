@@ -4,19 +4,20 @@
     <ul class="nav navbar-nav navbar-right">
         <li><span class="navbar-brand">
             {% if user.is_staff %}
-            <a target="_blank" style="text-decoration: none" href="{% url 'admin:index' %}"> Hello {{ user.get_full_name }}!</a>
+            <a target="_blank" style="text-decoration: none" href="{% url 'admin:index' %}"> Hello, {{ user.get_full_name }}!</a>
 
             {% else %}
-                Hello {{ user.get_full_name }}!
+                Hello, {{ user.get_full_name }}!
             {% endif %}
         </span></li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        <li><span class="navbar-brand">
+            <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></span></li>
     </ul>
 </form>
 
 {% else %}
 
-    <li><a href="{% url 'account_login' %}">Sign in</a></li>
-    <li><a href="{% url 'account_signup' %}">Sign up</a></li>
+<li><span class="navbar-brand"><a href="{% url 'account_login' %}">Sign in</a></span></li>
+<li><span class="navbar-brand"><a href="{% url 'account_signup' %}">Sign up</a></span></li>
 
 {% endif %}

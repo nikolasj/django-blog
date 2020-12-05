@@ -25,6 +25,17 @@ class BlogAPIView(GenericAPIView):
         return Response(serializer.data)
 
 
+class CommentAPIAddView(GenericAPIView):
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        return Comment.objects.all()
+
+    def get(self, request):
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        return Response(serializer.data)
+
+
 class IndexView(ListView):
     template_name = 'blog/post_list.html'
     queryset = Blog.objects.order_by('publish')
