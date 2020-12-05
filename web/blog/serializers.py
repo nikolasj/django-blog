@@ -1,19 +1,26 @@
 from rest_framework import serializers
-from .models import Blog, Comment
+from .models import Blog, Comment, User
 from authentificate.serializers import UserSerializer
 
 
-class BlogSerializer(serializers.ModelSerializer):
+class ShortUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Blog
-        fields = '__all__'
-        # exclude = ('content',)
+        model = User
+        fields = ('get_full_name',)
 
 
 class ShortBlogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blog
         fields = ('author', 'publish',)
+
+
+class BlogSerializer(serializers.ModelSerializer):
+    author = ShortUserSerializer(read_only=True)
+
+    class Meta:
+        model = Blog
+        exclude = ('content',)
 
 
 class CommentSerializer(serializers.ModelSerializer):
