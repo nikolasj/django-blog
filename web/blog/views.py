@@ -1,5 +1,5 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-# from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
 from django.shortcuts import redirect
@@ -15,53 +15,58 @@ from .forms import CommentForm
 from .serializers import *
 from rest_framework.response import Response
 from .models import Blog, Comment
-from authentificate.models import User
+from rest_framework.viewsets import GenericViewSet
+from .services import BlogService
+
+User = get_user_model()
+
 
 class BlogAPIView(GenericAPIView):
     serializer_class = BlogSerializer
 
     def get_queryset(self):
-        return Blog.objects.all()
+        return BlogService.get_blogs()
 
     def get(self, request):
         serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response(serializer.data)
 
 
-class CommentAPIAddView(CreateAPIView):
-    serializer_class = CommentSerializer
+class CommentAPIAddView(GenericViewSet):
+    # serializer_class = CommentSerializer
+
     permission_classes = (IsAuthenticated,)
 
-    def get_queryset(self):
-        return Comment.objects.all()
+    def get_serializer_class(self):
+        if self.action == 'get':
+            return CommentSerializer_
+        elif self.action == 'create':
+            return CommentSerializer
 
-    def get(self, request):
+        return CommentSerializer
+
+    def get_queryset(self):
+        return BlogService.get_comments()
+
+    def get(self, request, slug=None):
         serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response(serializer.data)
 
-    def perform_create(self, serializer):
-        print(self.request.user)
-        blog = Blog.objects.get(slug='blog-1')
+    def get_serializer_context(self):
+        data = super(CommentAPIAddView, self).get_serializer_context()
+        data['blog'] = self.get_blog_object()
+        return data
 
-        serializer.save(author=self.request.user, blog=blog)
+    def get_blog_object(self):
+        return BlogService.get_blog_by_slug(slug=self.kwargs.get('slug'))
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request, slug, **kwargs):
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+        comment = serializer.save()
 
-        return Response(status=status.HTTP_200_OK)
-
-    # def perform_create(self, serializer):
-    #     print(User)
-    #     author = get_object_or_404(User, id=self.request.data.get('id'))
-    #     return serializer.save(author=author)
-
-    # def post(self, request, *args, **kwargs):
-    #     print(request.POST)
-    #
-    #
-    #     return Response(status=status.HTTP_200_OK)
+        return Response(serializer.cleaned_data(comment), status=status.HTTP_201_CREATED)
 
 
 class IndexView(ListView):

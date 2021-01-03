@@ -23,7 +23,7 @@ class BlogSerializer(serializers.ModelSerializer):
         exclude = ('content',)
 
 
-class CommentSerializer(serializers.ModelSerializer):
+class CommentSerializer_(serializers.ModelSerializer):
     author = UserSerializer(read_only=True)
     blog = ShortBlogSerializer(read_only=True)
     parents = serializers.SerializerMethodField(method_name='get_parents')
@@ -42,3 +42,24 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ('id', 'comment', 'parent')
+
+    def cleaned_data(self, comment):
+        serializer = CommentSerializer_(instance=comment)
+        return serializer.data
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        blog = self.context.get('blog')
+        comment = Comment(**validated_data)
+        comment.author = request.user
+        comment.blog = blog
+        comment.save()
+        self.cleaned_data(comment)
+
+        return comment
