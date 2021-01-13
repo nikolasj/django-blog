@@ -15,6 +15,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'app.apps.AppConfig',
     'authentificate.apps.AuthentificateConfig',
+    'profileuser.apps.ProfileuserConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
