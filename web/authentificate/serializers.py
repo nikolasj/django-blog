@@ -1,7 +1,19 @@
+from allauth.account.adapter import get_adapter
+from allauth.account.utils import setup_user_email
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from rest_auth.registration.serializers import RegisterSerializer
+from rest_auth.serializers import LoginSerializer
 
 User = get_user_model()
+
+
+class UserRegisterSerializer(RegisterSerializer):
+    username = None
+
+
+class UserSignInSerializer(LoginSerializer):
+    username = None
 
 
 class UserSerializer(serializers.ModelSerializer):

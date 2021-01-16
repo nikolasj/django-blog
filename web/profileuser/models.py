@@ -15,7 +15,7 @@ GENDERS = (
 
 def profile_upload_path(instance, filename):
     """file will be uploaded to MEDIA_ROOT / profile / user_<id>_username / <filename>"""
-    return f'profile/{instance.user.id}_{instance.user.username}/{filename}'
+    return f'profile/{instance.user.id}/{filename}'
 
 
 class ProfileManager(models.Manager):
@@ -72,10 +72,10 @@ class Profile(models.Model):
         return self.phone_number
 
     def get_absolute_url(self):
-        return reverse("main:user-profile", kwargs={"user": self.user.username})
+        return reverse("profile:user_profile", kwargs={"user": self.user.id})
 
     def get_image_upload_url(self):
-        return reverse("main:image_upload", kwargs={"user": self.user.username})
+        return reverse("profile:image_upload", kwargs={"user": self.user.id})
 
     image_tag.short_description = 'Avatar'
 

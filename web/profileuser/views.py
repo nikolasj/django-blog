@@ -36,10 +36,8 @@ class ProfileView(View):
     template_name = 'account/profile/main_profile_page.html'
     context_object_name = 'profile'
 
-    def get(self, request, user=None, *args, **kwargs):
-        print("User")
-        print(user)
-        profile = get_object_or_404(User, email='root@yandex.ru')
+    def get(self, request, id=None, *args, **kwargs):
+        profile = get_object_or_404(User, id=id)
         print(profile)
         upload_image_form = ImageFileUploadForm()
         change_password = ChangePassForm()

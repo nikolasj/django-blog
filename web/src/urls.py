@@ -30,9 +30,8 @@ urlpatterns = [
     path('summernote/', include('django_summernote.urls')),
     path('token/verify/', verify_jwt_token, name="verify_auth_token"),
     path('token/refresh/', refresh_jwt_token, name="refresh_auth_token"),
-    path('swagger(?P<format>\.json|\.yaml)', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    # path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 
 # handler404 = 'app.views.custom_handler404'
