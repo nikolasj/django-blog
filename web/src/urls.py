@@ -26,7 +26,7 @@ urlpatterns = [
     path('user/', include('authentificate.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path('profile/', include('profileuser.urls')),
+    path('', include('profileuser.urls')),
     path('summernote/', include('django_summernote.urls')),
     path('token/verify/', verify_jwt_token, name="verify_auth_token"),
     path('token/refresh/', refresh_jwt_token, name="refresh_auth_token"),

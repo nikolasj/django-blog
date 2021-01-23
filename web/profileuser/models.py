@@ -31,7 +31,7 @@ class ProfileManager(models.Manager):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile_set')
     signature = models.TextField(max_length=500, blank=True)
     # nationality = models.CharField(max_length=2, choices=COUNTRIES)
     gender = models.CharField(max_length=1, blank=True, null=True, choices=ProfileManager.GENDER_CHOICES)

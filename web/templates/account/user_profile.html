@@ -1,0 +1,98 @@
+
+{% extends "layer.html" %}
+{% load static i18n %}
+{% block title %} Profile {{ user_profile }}{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'app/css/social_but.css' %}"/>
+<link rel="stylesheet" href="{% static 'profiles/css/profile.css' %}"/>
+
+{% endblock %}
+
+{% block content %}
+
+<hr>
+<div class="container bootstrap snippet">
+    <div class="row">
+        <div class="col-sm-10"><h1>{{ profile.user.first_name }} {{profile.user.last_name}}</h1></div>
+        <div class="col-sm-10">
+            <h5>{% if profile.user.is_customer_admin %}
+                <b>(Customer admin)</b>
+                {% endif %}
+            </h5>
+            <h5>
+                <b>Job title:</b> {{ profile.job_title }}
+            </h5>
+        </div>
+        <div class="col-sm-2">
+            <a href="#" class="pull-right">
+                <img title="profile image" class="img-circle img-responsive"
+                     src="https://www.gravatar.com/avatar/28fd20ccec6865e2d5f0e1f4446eb7bf?s=100">
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="text-center">
+                {% if user_profile.socialaccount_set.all.0.get_avatar_url %}
+                <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" alt="{{ user.get_full_name }}"
+                     class="avatar img-circle img-thumbnail" width="300">
+                {% elif profile.image %}
+                <img src="{{ profile.image}}" class="avatar img-circle img-thumbnail" alt="avatar">
+                {% else %}
+                <img src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail"
+                     alt="avatar">
+                {% endif %}<br>
+                {% if profile.user.id == user.id %}
+                <h6>{% trans 'Upload a different photo...' %}</h6>
+
+                <input data-href="{% url 'profiles:rest_user_image_upload' %}"
+                       id="id_avatar" type="file" class="text-center center-block file-upload">
+
+                <div id="avatar_change_response" class="form-group api-response"></div>
+                {% endif %}
+
+            </div>
+            </hr><br>
+            {% if profile.user.id == user.id %}
+            {% include 'profiles/include/panel_social.html' %}
+            {% endif %}
+        </div><!--/col-3-->
+        <div class="col-sm-9">
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#home">{% trans 'Main' %}</a></li>
+                <li {% if profile.user.id != user.id %} class="disabled" {% endif %}>
+                    <a data-toggle="tab" href="#messages">{% trans 'Messages' %} </a></li>
+                <li {% if profile.user.id != user.id %} class="disabled" {% endif %}>
+                    <a data-toggle="tab" href="#settings">{% trans 'Settings' %}</a></li>
+
+            </ul>
+            <div class="tab-content">
+                {% include 'profiles/include/menu_main.html' %}
+                {% if profile.user.id == user.id %}
+                {% include 'profiles/include/menu_messages.html' %}
+                {% include 'profiles/include/menu_settings.html' %}
+                {% endif %}
+            </div><!--/tab-pane-->
+        </div><!--/tab-content-->
+
+    </div><!--/col-9-->
+</div><!--/row-->
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var user = "{{ user }}"
+    var website = ""
+
+
+
+
+</script>
+{% endblock %}
+
+{% block jquery %}
+$.getScript('{% static 'profiles/js/password_change.js' %}');
+$.getScript('{% static 'profiles/js/credentials_change.js' %}');
+$.getScript('{% static 'profiles/js/avatar_change.js' %}');
+{% endblock %}

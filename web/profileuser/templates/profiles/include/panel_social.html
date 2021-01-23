@@ -1,0 +1,15 @@
+{% load i18n %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Social Media
+        <i class="fa fa-facebook fa-1x"></i>
+        <i class="fa fa-github fa-1x"></i>
+        <i class="fa fa-twitter fa-1x"></i>
+        <i class="fa fa-pinterest fa-1x"></i>
+        <i class="fa fa-google-plus fa-1x"></i>
+    </div>
+    <div class="panel-body">
+        {% include 'socialaccount/connections.html' with form=social_profiles %}
+    </div>
+</div>
+<!--user_profile/include/connections_social.html-->

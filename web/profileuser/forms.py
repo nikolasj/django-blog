@@ -6,8 +6,8 @@ from allauth.account.forms import ChangePasswordForm
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('signature', 'gender', 'phone_number')
-        exclude = ('user',)
+        fields = '__all__' #('signature', 'gender', 'phone_number', 'id')
+        exclude = ('website', 'user')
         # widgets = {'author': forms.ChoiceField(choices=ProfileManager.GENDER_CHOICES)}
 
     def __init__(self, *args, **kwargs):
@@ -29,9 +29,9 @@ class ProfileForm(forms.ModelForm):
     # def save(self, commit=True, *args, **kwargs):
     #     super(ProfileForm, self).__init__(*args, **kwargs)
     #     # print("Loop:")
-        # for data, value in self.fields.items():
-        #     print(dir(data), ":", dir(value))
-        #     value.widget.attrs['placeholder'] = value.help_text
+    #     for data, value in self.fields.items():
+    #         print(dir(data), ":", dir(value))
+    #         value.widget.attrs['placeholder'] = value.help_text
 
 
 class ChangePassForm(ChangePasswordForm):

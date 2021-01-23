@@ -3,6 +3,12 @@ from .models import Blog, Comment, User
 from authentificate.serializers import UserSerializer
 
 
+class UserBlogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Blog
+        fields = ('title', 'get_absolute_url')
+
+
 class ShortUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
