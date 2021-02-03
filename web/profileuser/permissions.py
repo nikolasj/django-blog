@@ -9,5 +9,7 @@ class IsOwnerProfile(permissions.BasePermission):
         :param obj: User
         :return: bool
         """
+        # if request.user.is_authenticated and request.method in permissions.SAFE_METHODS:
+        #     return True
 
         return request.user == obj

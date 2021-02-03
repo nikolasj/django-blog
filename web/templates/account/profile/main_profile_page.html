@@ -4,15 +4,15 @@
         {% csrf_token %}
         <div class="form-group">
             <div class="col-xs-6">
-                <label for="first_name"><h4>First name:  {{ user_profile.first_name }}</h4></label>
+                <label for="first_name"><h4>First name:  {{ first_name }}</h4></label>
             </div>
         </div>
             <div class="form-group">
             <div class="col-xs-6">
                 <label for="phone">
                     <h4>Phone:
-                        {% if user_profile.profile.phone_number%}
-                        {{ user_profile.profile.phone_number }}
+                        {% if profile.phone_number%}
+                        {{ profile.phone_number }}
                         {% endif %}
                     </h4>
                 </label>
@@ -21,27 +21,27 @@
 
         <div class="form-group">
             <div class="col-xs-6">
-                <label for="last_name"><h4>Last name:  {{ user_profile.last_name }}</h4></label>
+                <label for="last_name"><h4>Last name:  {{ last_name }}</h4></label>
             </div>
         </div>
         <div class="form-group">
             <div class="col-xs-6">
-                <label for="email"><h4>Email:  {{user_profile.email}}</h4></label>
+                <label for="email"><h4>Email:  {{email}}</h4></label>
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-xs-6">
-                <label for="location"><h4>Location</h4></label>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-xs-6">
-                <p for="last_login"><h4>Last login: {{user_profile.last_login}}</h4></p>
-            </div>
-            <div class="col-xs-6">
-                <p for="date_registered"><h4>Registered: {{user_profile.date_joined}}</h4></p>
-            </div>
-        </div>
+<!--        <div class="form-group">-->
+<!--            <div class="col-xs-6">-->
+<!--                <label for="location"><h4>Location</h4></label>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="form-group">-->
+<!--            <div class="col-xs-6">-->
+<!--                <p for="last_login"><h4>Last login: {{profile.last_login}}</h4></p>-->
+<!--            </div>-->
+<!--            <div class="col-xs-6">-->
+<!--                <p for="date_registered"><h4>Registered: {{profile.date_joined}}</h4></p>-->
+<!--            </div>-->
+<!--        </div>-->
     <hr>
 </div><!--/tab-pane-->
 

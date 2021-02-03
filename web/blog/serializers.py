@@ -3,7 +3,9 @@ from .models import Blog, Comment, User
 from authentificate.serializers import UserSerializer
 
 
-class UserBlogSerializer(serializers.ModelSerializer):
+class UserBlogSerializer(serializers.HyperlinkedModelSerializer):
+    # get_absolute_url = serializers.HyperlinkedIdentityField(view_name="blog:blog-detail")
+
     class Meta:
         model = Blog
         fields = ('title', 'get_absolute_url')
