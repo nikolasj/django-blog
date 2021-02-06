@@ -37,7 +37,7 @@
 <!--                    <input type="submit"/>-->
                     <input type="submit" id="btn" value="Отправить" class="text-center center-block file-upload"/>
                 </form>
-                <input type="file" data-href="{{ profile.get_image_upload_url }}" data-csrf="{{ csrf_token }}"
+                <input type="file" value="" data-csrf="{{ csrf_token }}"
                        class="text-center center-block file-upload" id="id_avatar">
                 {% endif %}
             </div>

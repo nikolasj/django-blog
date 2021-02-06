@@ -14,18 +14,35 @@ from .models import Profile
 from django.contrib import messages
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.mixins import RetrieveModelMixin
-from .serializers import UserSerializer
+from . import serializers
 from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.parsers import MultiPartParser
+from rest_framework import status
 
 User = get_user_model()
 
 
 class ProfileViewSet(RetrieveModelMixin, GenericViewSet):
-    serializer_class = UserSerializer
     permission_classes = (IsOwnerProfile,)
+    parser_classes = (MultiPartParser,)
 
     def get_queryset(self):
         return User.objects.all().select_related('profile_set')
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return serializers.UserSerializer
+        elif self.action == "update_image":
+            return serializers.UploadImageSerializer
+
+        return serializers.UserSerializer
+
+    def update_image(self, request):
+        print(request.FILES)
+        serializer = self.get_serializer(data=request.data, instance=request.user.profile_set)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
 
 class TemplateProfileViewSet(ProfileViewSet):
@@ -40,7 +57,7 @@ class TemplateProfileViewSet(ProfileViewSet):
 
 class UserProfileView(GenericAPIView):
     permission_classes = (IsOwnerProfile,)
-    serializer_class = UserSerializer
+    serializer_class = serializers.UserSerializer
 
     def get_queryset(self):
         return User.objects.filter(id=self.request.user.id).select_related('profile_set')

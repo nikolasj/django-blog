@@ -29,7 +29,8 @@ function avatar_change(e){
   return;
  }
   console.log("image");
- var href = $(this).data('href');
+ // var href = $(this).data('href');
+    var href = "/profile/upload_image/";
   console.log(href);
  var data = new FormData();
     data.append('image', input.files[0]);

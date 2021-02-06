@@ -1,5 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from rest_framework.reverse import reverse_lazy
+
 from .managers import UserManager
 # from django.utils.translation import gettext_lazy as _
 
@@ -17,3 +19,6 @@ class User(AbstractUser):
     class Meta:
         verbose_name = 'user'
         verbose_name_plural = 'users'
+
+    def get_image_upload_url(self):
+        return reverse_lazy("")
