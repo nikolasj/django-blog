@@ -35,10 +35,10 @@
                     {% csrf_token %}
                     {{ upload_image_form.as_p }}
 <!--                    <input type="submit"/>-->
-                    <input type="submit" id="btn" value="Отправить" class="text-center center-block file-upload"/>
                 </form>
-                <input type="file" value="" data-csrf="{{ csrf_token }}"
-                       class="text-center center-block file-upload" id="id_avatar">
+                <input type="file" data-csrf="{{ csrf_token }}" value=" " style="color:transparent;"
+                       class="text-center center-block file-upload" id="id_avatar" ><label id="fileLabel"></label>
+                <input type="submit" id="btn" value="Удалить" class="text-center center-block delete-upload"/>
                 {% endif %}
             </div>
             </hr><br>
@@ -70,6 +70,21 @@
 <script>
     var user = "{{ user }}"
     var website = "{{ profile.website }}"
+
+// window.pressed = function(){
+//     var a = document.getElementById('id_avatar');
+//     if(a.value == "")
+//     {
+//         console.log("t")
+//         fileLabel.innerHTML = "Choose file";
+//     }
+//     else
+//     {
+//         console.log("t2")
+//         var theSplit = a.value.split('\\');
+//         fileLabel.innerHTML = theSplit[theSplit.length-1];
+//     }
+// };
 </script>
 {% endblock %}
 
