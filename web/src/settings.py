@@ -10,11 +10,18 @@ SITE_ID = int(os.environ.get("SITE_ID", default=1))
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 SECRET_KEY = os.environ.get("SECRET_KEY")
 AUTH_USER_MODEL = 'authentificate.User'
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+AVATAR_IMAGE_MAX_SIZE = 2.0  # mb
 
 INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'app.apps.AppConfig',
     'authentificate.apps.AuthentificateConfig',
+    'profileuser.apps.ProfileuserConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

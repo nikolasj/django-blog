@@ -3,6 +3,8 @@ from django.db import models
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.text import slugify
+from rest_framework.reverse import reverse
+
 from .managers import PublishedManager
 User = get_user_model()
 
@@ -35,7 +37,7 @@ class Blog(models.Model):
         return self.blog_comment.filter(parent__isnull=True).order_by('-created_date')
 
     def get_absolute_url(self):
-        return reverse_lazy('blog:detail', kwargs={'slug': self.slug})
+        return reverse('blog:detail', kwargs={'slug': self.slug})
 
     def is_published(self):
         return not self.draft

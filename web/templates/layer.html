@@ -16,6 +16,7 @@
 
     <!-- Custom styles for this template -->
     <link href="{% static 'app/css/blog-home.css' %}" rel="stylesheet">
+    <link href="{% static 'app/css/site.css' %}" rel="stylesheet">
     <script src="https://kit.fontawesome.com/fe539a9d82.js" crossorigin="anonymous"></script>
     {% block head %} {% endblock %}
 </head>
@@ -87,12 +88,12 @@
 <script src="{% static 'app/vendor/jquery/jquery.min.js' %}"></script>
 <script src="{% static 'app/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 {% block scripts %}{% endblock %}
-<!--<script>-->
-<!--      $(document).ready(function(){-->
-<!--          {% block jquery %} {% endblock %}-->
-<!--      })-->
+<script>
+      $(document).ready(function(){
+          {% block jquery %} {% endblock %}
+      })
 
-<!--</script>-->
+</script>
 </body>
 
 </html>

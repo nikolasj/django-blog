@@ -1,13 +1,20 @@
 from rest_framework import serializers
-from .models import Blog, Comment
+from .models import Blog, Comment, User
 from authentificate.serializers import UserSerializer
 
 
-class BlogSerializer(serializers.ModelSerializer):
+class UserBlogSerializer(serializers.HyperlinkedModelSerializer):
+    # get_absolute_url = serializers.HyperlinkedIdentityField(view_name="blog:blog-detail")
+
     class Meta:
         model = Blog
-        fields = '__all__'
-        # exclude = ('content',)
+        fields = ('title', 'get_absolute_url')
+
+
+class ShortUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('get_full_name',)
 
 
 class ShortBlogSerializer(serializers.ModelSerializer):
@@ -16,7 +23,15 @@ class ShortBlogSerializer(serializers.ModelSerializer):
         fields = ('author', 'publish',)
 
 
-class CommentSerializer(serializers.ModelSerializer):
+class BlogSerializer(serializers.ModelSerializer):
+    author = ShortUserSerializer(read_only=True)
+
+    class Meta:
+        model = Blog
+        exclude = ('content',)
+
+
+class CommentSerializer_(serializers.ModelSerializer):
     author = UserSerializer(read_only=True)
     blog = ShortBlogSerializer(read_only=True)
     parents = serializers.SerializerMethodField(method_name='get_parents')
@@ -34,4 +49,25 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('comment', 'created_date', 'parents', 'parent', 'author', 'blog')
+        fields = '__all__'
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ('id', 'comment', 'parent')
+
+    def cleaned_data(self, comment):
+        serializer = CommentSerializer_(instance=comment)
+        return serializer.data
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        blog = self.context.get('blog')
+        comment = Comment(**validated_data)
+        comment.author = request.user
+        comment.blog = blog
+        comment.save()
+        self.cleaned_data(comment)
+
+        return comment

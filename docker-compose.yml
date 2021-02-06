@@ -25,16 +25,16 @@ services:
     env_file:
       - docker/dev/env/.env.db
 
-  jupyter_notebook:
-    build:
-      context: .
-      dockerfile: docker/dev/web/Dockerfile
-    command: python manage.py shell_plus --notebook
-    depends_on:
-      - web
-    ports:
-    - 8888:8888
-    env_file:
-      - docker/dev/env/.env
+#  jupyter_notebook:
+#    build:
+#      context: .
+#      dockerfile: docker/dev/web/Dockerfile
+#    command: python manage.py shell_plus --notebook
+#    depends_on:
+#      - web
+#    ports:
+#    - 8888:8888
+#    env_file:
+#      - docker/dev/env/.env
 volumes:
   postgres_data:
