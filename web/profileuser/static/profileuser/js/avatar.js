@@ -5,9 +5,30 @@ $.ajaxSetup({
 $(function () {
     $(document).on("submit", "#id_ajax_upload_form", avatar_change);
     $(".file-upload").on('change', avatar_change);
+    $("#delete_image_btn").on('click', delete_image);
 
 });
 
+
+function delete_image() {
+    var href = "/profile/delete_image/";
+    // console.log(href);
+    // var data = new FormData();
+    // data.append('image', input.files[0]);
+    fetch(href, {
+        method: 'DELETE',
+        headers: {
+//            'Authorization': Token ${userToken},
+            "X-CSRFToken": getCookie("csrftoken")
+        }
+    }).catch((error) => {
+            console.log("Error.");
+
+        })
+        .then(response => {
+            return location.reload();
+        });
+}
 
 function input_image(input) {
     if (input.files && input.files[0]) {

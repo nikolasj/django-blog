@@ -12,6 +12,8 @@ GENDERS = (
     ('F', 'Female'),
 )
 
+DEFAULT_IMAGE_PATH = 'profile/default.jpg'
+
 
 def profile_upload_path(instance, filename):
     """file will be uploaded to MEDIA_ROOT / profile / user_<id>_username / <filename>"""
@@ -35,7 +37,7 @@ class Profile(models.Model):
     signature = models.TextField(max_length=500, blank=True)
     # nationality = models.CharField(max_length=2, choices=COUNTRIES)
     gender = models.CharField(max_length=1, blank=True, null=True, choices=ProfileManager.GENDER_CHOICES)
-    image = models.ImageField(default='profile/default.jpg', upload_to=profile_upload_path)
+    image = models.ImageField(default=DEFAULT_IMAGE_PATH, upload_to=profile_upload_path)
     website = models.URLField(default='', blank=True)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                                  message="Phone number must be entered in the format: '+999999999'. Up to 15 digits "
@@ -79,6 +81,14 @@ class Profile(models.Model):
 
     image_tag.short_description = 'Avatar'
 
+    def is_default_image(self):
+        return True if self.image and self.image.url.find(DEFAULT_IMAGE_PATH) != -1 else False
+
+    def set_default_image(self):
+        self.image.delete(save=False)
+        self.image = DEFAULT_IMAGE_PATH
+        self.save()
+
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -87,7 +97,6 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 
 post_save.connect(create_user_profile, sender=User)
-
 
 # @receiver(post_save, sender=User)
 # def save_user_profile(sender, instance, **kwargs):
