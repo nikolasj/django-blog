@@ -35,6 +35,44 @@ class ProfileViewSet(RetrieveModelMixin, GenericViewSet):
         elif self.action == "update_image":
             return serializers.UploadImageSerializer
 
+
+        return serializers.UserSerializer
+
+    def update_image(self, request):
+        print(request.FILES)
+        serializer = self.get_serializer(data=request.data, instance=request.user.profile_set)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    def get_object(self):
+        obj = get_object_or_404(self.get_queryset(), id=self.request.user.id)
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+    def delete_image(self, request):
+        user = self.get_object()
+        profile = user.profile_set
+        if profile.is_default_image():
+            return Response({"detail": "This is default image!"}, status=status.HTTP_400_BAD_REQUEST)
+
+        profile.set_default_image()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ProfileViewAvatarSet(RetrieveModelMixin, GenericViewSet):
+    permission_classes = (IsOwnerProfile,)
+    parser_classes = (MultiPartParser,)
+
+    def get_queryset(self):
+        return User.objects.all().select_related('profile_set')
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return serializers.UserSerializer
+        elif self.action == "update_image":
+            return serializers.UploadImageAvatarSerializer
+
         return serializers.UserSerializer
 
     def update_image(self, request):

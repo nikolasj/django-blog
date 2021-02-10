@@ -1,14 +1,34 @@
 $.ajaxSetup({
-    headers: { "X-CSRFToken": getCookie("csrftoken") }
+    headers: {"X-CSRFToken": getCookie("csrftoken")}
 });
 
-$(function() {
-    console.log("abatar js");
-    $(document).on("submit", "#id_ajax_upload_form" , avatar_change);
+$(function () {
+    $(document).on("submit", "#id_ajax_upload_form", avatar_change);
     $(".file-upload").on('change', avatar_change);
+    $("#delete_image_btn").on('click', delete_image);
 
 });
 
+
+function delete_image() {
+    var href = "/profile/delete_image/";
+    // console.log(href);
+    // var data = new FormData();
+    // data.append('image', input.files[0]);
+    fetch(href, {
+        method: 'DELETE',
+        headers: {
+//            'Authorization': Token ${userToken},
+            "X-CSRFToken": getCookie("csrftoken")
+        }
+    }).catch((error) => {
+            console.log("Error.");
+
+        })
+        .then(response => {
+            return location.reload();
+        });
+}
 
 function input_image(input) {
     if (input.files && input.files[0]) {
@@ -20,19 +40,21 @@ function input_image(input) {
     }
 }
 
-function avatar_change(e){
-    console.log("abatar change");
- var input = document.getElementById('id_avatar');
- console.log(input);
- if ((input.files && input.files[0]) == false) {
-      console.log("exit");
-  return;
- }
-  console.log("image");
- // var href = $(this).data('href');
+function avatar_change(e) {
+    // console.log("abatar change");
+    var input = document.getElementById('id_avatar');
+
+    // console.log(input);
+
+    if ((input.files && input.files[0]) == false) {
+        console.log("exit");
+        return;
+    }
+    // console.log("image");
+    // var href = $(this).data('href');
     var href = "/profile/upload_image/";
-  console.log(href);
- var data = new FormData();
+    // console.log(href);
+    var data = new FormData();
     data.append('image', input.files[0]);
     fetch(href, {
         method: 'POST',
@@ -42,17 +64,17 @@ function avatar_change(e){
         },
         body: data
     })
-    .then(response => {
-        return response.json();
-    })
-    .then(data => {
-  input_image(input)
-  input.value= null
-    })
-    .catch((error) => {
-        input_image(input)
-  input.value= null
-    });
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            input_image(input)
+            input.value = null
+        })
+        .catch((error) => {
+            input_image(input)
+            input.value = null
+        });
 
 }
 
